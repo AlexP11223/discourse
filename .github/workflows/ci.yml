@@ -96,18 +96,9 @@ jobs:
       - name: Yarn install
         run: yarn install --dev
 
-      - name: Schema cache
-        uses: actions/cache@v1
-        with:
-          path: db/.github-action-schema-cache
-          key: schema-${{ hashFiles('db/migrate/*') }}-${{ hashFiles('db/post_migrate/*') }}
-
-      - name: Relocate schema
-        run: mv db/.github-action-schema-cache/schema.rb db/schema.rb && rm -rf db/.github-action-schema-cache
-
       - name: Create database
         if: env.BUILD_TYPE != 'LINT'    
-        run: bin/rake db:create && bin/rake db:schema:load && bin/rake db:migrate
+        run: bin/rake db:create && bin/rake db:migrate
 
       - name: Rubocop
         if: env.BUILD_TYPE == 'LINT'
@@ -134,7 +125,4 @@ jobs:
       - name: Plugin QUnit
         if: env.BUILD_TYPE == 'FRONTEND'
         run: bundle exec rake plugin:qunit
-
-      - name: Relocate schema
-        run: mkdir db/.github-action-schema-cache && mv db/schema.rb db/.github-action-schema-cache/schema.rb
         
