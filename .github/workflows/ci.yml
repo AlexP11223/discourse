@@ -91,7 +91,6 @@ jobs:
 
       - name: Yarn install
         run: yarn install --dev
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
 
       - name: Create database          
         run: bin/rake db:create db:migrate
