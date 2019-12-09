@@ -14,7 +14,7 @@ if Rails.env.development?
   require_dependency 'file_store/local_store'
 end
 
-module Discourse
+module Discourse  
   DB_POST_MIGRATE_PATH ||= "db/post_migrate"
 
   require 'sidekiq/exception_handler'
@@ -86,7 +86,7 @@ module Discourse
     cm = RailsMultisite::ConnectionManagement
     parent_logger.handle_exception(ex, {
       current_db: cm.current_db,
-      current_hostname: cm.current_hostname
+      current_hostname:  cm.current_hostname
     }.merge(context))
 
     raise ex if Rails.env.test?
