@@ -16,7 +16,7 @@ require 'time'
 @owner = @repository["owner"]["login"]
 @repo = @repository["name"]
 
-@check_name = "Rubocop"
+@check_name = "LINT / Rubocop"
 
 @headers = {
   "Content-Type": 'application/json',
@@ -79,7 +79,7 @@ end
 def run_rubocop
   annotations = []
   errors = nil
-  Dir.chdir(@GITHUB_WORKSPACE) {
+  Dir.chdir(@GITHUB_WORKSPACE) { # rubocop:disable DiscourseCops/NoChdir because this is not part of the app
     errors = JSON.parse(`rubocop --format json`)
   }
   conclusion = "success"
@@ -128,10 +128,14 @@ def run
 
     update_check(id, conclusion, output)
 
-    fail if conclusion == "failure"
+    if conclusion == "failure"
+      puts "Rubocop Failed: #{output["summary"]}"
+      exit 1
+    end
   rescue
     update_check(id, "failure", nil)
-    fail
+    puts "Rubocop Errored"
+    exit 1
   end
 end
 
