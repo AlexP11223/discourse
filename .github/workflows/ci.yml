@@ -3,6 +3,26 @@ name: CI
 on: [push]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Bundler cache
+        uses: actions/cache@v1
+        id: bundler-cache
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-${{ matrix.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.os }}-gem-
+      - name: Rubocop Linter
+        uses: andrewmcodes/rubocop-linter-action@v2.0.0
+        with:
+          fail_level: 'refactor'
+          bundle: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   build:
     name: ${{ matrix.build_types }}
     runs-on: ${{ matrix.os }}
