@@ -12,10 +12,10 @@ jobs:
       BUILD_TYPE: ${{ matrix.build_types }}
       RAILS_ENV: test
       DATABASE_URL: postgresql://discourse:discourse@localhost/discourse_test
-
+      PGHOST: localhost
 
     strategy:
-      fail-fast: true
+      fail-fast: false
 
       matrix:
         build_types: [ 'BACKEND', 'FRONTEND', 'LINT']
@@ -26,8 +26,9 @@ jobs:
 
     services:
       postgres:
-        image: postgres:11.5
-        ports: ["5432:5432"]
+        image: postgres:10
+        ports: 
+          - 5432:5432
         env:
           POSTGRES_USER: discourse
           POSTGRES_PASSWORD: discourse
@@ -46,9 +47,7 @@ jobs:
 
       - name: Setup packages
         run: |
-          echo 'deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main' | sudo tee /etc/apt/sources.list.d/pgdg.list > /dev/null
-          wget --no-check-certificate -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O- | sudo -u root apt-key add -
-          sudo apt-get -yqq install libpq-dev gifsicle jpegoptim optipng jhead
+          sudo apt-get -yqq install postgresql-client libpq-dev gifsicle jpegoptim optipng jhead
 
       - name: Setup redis
         uses: shogo82148/actions-setup-redis@v1
