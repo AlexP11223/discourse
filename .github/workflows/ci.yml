@@ -98,7 +98,7 @@ jobs:
 
       - name: Create database
         if: env.BUILD_TYPE != 'LINT'    
-        run: bin/rake db:create db:migrate
+        run: bin/rake db:create db:migrate && bin/rake db:migrate
 
       - name: Rubocop
         if: env.BUILD_TYPE == 'LINT'
