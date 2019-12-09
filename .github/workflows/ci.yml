@@ -11,8 +11,9 @@ jobs:
       RUBY_GLOBAL_METHOD_CACHE_SIZE: 131072
       BUILD_TYPE: ${{ matrix.build_types }}
       RAILS_ENV: test
-      DATABASE_URL: postgresql://discourse:discourse@localhost/discourse_test
       PGHOST: localhost
+      PGUSER: discourse
+      PGPASSWORD: discourse
 
     strategy:
       fail-fast: false
@@ -102,9 +103,9 @@ jobs:
         
       - name: RSpec
         if: env.BUILD_TYPE == 'BACKEND'
-        run: |
-          bundle exec rspec
-          bundle exec rake plugin:spec
+        run: | # Using fold because github actions doesn't behave well with long lines
+          bundle exec rspec | fold -w 100
+          bundle exec rake plugin:spec  | fold -w 100
 
       - name: QUnit
         if: env.BUILD_TYPE == 'FRONTEND'
