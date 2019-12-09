@@ -47,9 +47,9 @@ jobs:
           fetch-depth: 1
 
       - name: Setup packages
-        run: |
-          sudo apt-get -yqq install postgresql-client libpq-dev gifsicle jpegoptim optipng jhead
-          wget -qO- https://raw.githubusercontent.com/discourse/discourse_docker/master/image/base/install-pngquant | sudo sh
+        run:
+          - sudo apt-get -yqq install postgresql-client libpq-dev gifsicle jpegoptim optipng jhead &&\
+          - wget -qO- https://raw.githubusercontent.com/discourse/discourse_docker/master/image/base/install-pngquant | sudo sh
 
       - name: Setup redis
         uses: shogo82148/actions-setup-redis@v1
@@ -102,14 +102,14 @@ jobs:
         
       - name: RSpec
         if: env.BUILD_TYPE == 'BACKEND'
-        run: |
-          bundle exec rspec
-          bundle exec rake plugin:spec
+        run:
+          - bundle exec rspec
+          - bundle exec rake plugin:spec
 
       - name: QUnit
         if: env.BUILD_TYPE == 'FRONTEND'
-        run: |
-          bundle exec rake qunit:test['1200000']
-          bundle exec rake qunit:test['1200000','/wizard/qunit']
-          bundle exec rake plugin:qunit
+        run:
+          - bundle exec rake qunit:test['1200000'] && \
+          - bundle exec rake qunit:test['1200000','/wizard/qunit'] && \
+          - bundle exec rake plugin:qunit
         
