@@ -7,19 +7,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Bundler cache
-        uses: actions/cache@v1
-        id: bundler-cache
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-${{ matrix.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ matrix.os }}-gem-
+      # - name: Bundler cache
+      #   uses: actions/cache@v1
+      #   id: bundler-cache
+      #   with:
+      #     path: vendor/bundle
+      #     key: ${{ runner.os }}-${{ matrix.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-gem-
       - name: Rubocop Linter
         uses: andrewmcodes/rubocop-linter-action@v2.0.0
         with:
+          additional_gems: 'rubocop-discourse'
           fail_level: 'refactor'
-          bundle: true
+          bundle: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -93,9 +94,9 @@ jobs:
         id: bundler-cache
         with:
           path: vendor/bundle
-          key: ${{ runner.os }}-${{ matrix.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+          key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ matrix.os }}-gem-
+            ${{ runner.os }}-gem-
       
       - name: Setup gems
         run: bundle install --without development --deployment --jobs 4 --retry 3
