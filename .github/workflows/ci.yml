@@ -4,6 +4,7 @@ on: [push]
 
 jobs:
   build:
+    name: ${{ matrix.build_types }}
     runs-on: ${{ matrix.os }}
 
     env:
