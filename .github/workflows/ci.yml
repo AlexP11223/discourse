@@ -15,15 +15,10 @@ jobs:
       #     key: ${{ runner.os }}-${{ matrix.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
       #     restore-keys: |
       #       ${{ runner.os }}-gem-
+      - name: Install gems
+        run: gem install rubocop:0.69.0 rubocop-discourse 
       - name: Rubocop Linter
-        uses: andrewmcodes/rubocop-linter-action@v2.0.0
-        with:
-          version: "0.69.0"
-          additional_gems: 'rubocop-discourse'
-          fail_level: 'refactor'
-          bundle: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ruby script/rubocop_github_action.rb
 
   build:
     name: ${{ matrix.build_types }}
