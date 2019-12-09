@@ -80,7 +80,7 @@ def run_rubocop
   annotations = []
   errors = nil
   Dir.chdir(@GITHUB_WORKSPACE) { # rubocop:disable DiscourseCops/NoChdir because this is not part of the app
-    errors = JSON.parse(`rubocop --format json`)
+    errors = JSON.parse(`bundle exec rubocop --format json .`)
   }
   conclusion = "success"
   count = 0

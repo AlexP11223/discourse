@@ -3,31 +3,6 @@ name: CI
 on: [push]
 
 jobs:
-  lint:
-    name: LINT / Rubocop
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2-beta
-      # - name: Bundler cache
-      #   uses: actions/cache@v1
-      #   id: bundler-cache
-      #   with:
-      #     path: vendor/bundle
-      #     key: ${{ runner.os }}-${{ matrix.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-gem-
-      - name: Setup ruby
-        uses: actions/setup-ruby@v1
-        with:
-          ruby-version: '2.6.3'
-          architecture: 'x64'  
-      - name: Install gems
-        run: gem install rubocop:0.69.0 rubocop-discourse 
-      - name: Rubocop Linter
-        run: ruby script/rubocop_github_action.rb
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   build:
     name: ${{ matrix.build_types }}
     runs-on: ${{ matrix.os }}
@@ -127,7 +102,9 @@ jobs:
 
       - name: Rubocop
         if: env.BUILD_TYPE == 'LINT'
-        run: bundle exec rubocop .
+        run: ruby script/rubocop_github_action.rb
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
       - name: Core RSpec
         if: env.BUILD_TYPE == 'BACKEND'
