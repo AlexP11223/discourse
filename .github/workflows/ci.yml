@@ -6,7 +6,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2-beta
       # - name: Bundler cache
       #   uses: actions/cache@v1
       #   id: bundler-cache
