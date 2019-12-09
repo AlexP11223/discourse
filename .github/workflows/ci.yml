@@ -101,9 +101,9 @@ jobs:
         
       - name: RSpec
         if: env.BUILD_TYPE == 'BACKEND'
-        run: | # Using fold because github actions doesn't behave well with long lines
-          bundle exec rspec | fold -w 100
-          bundle exec rake plugin:spec  | fold -w 100
+        run: |
+          bundle exec rspec
+          bundle exec rake plugin:spec
 
       - name: QUnit
         if: env.BUILD_TYPE == 'FRONTEND'
