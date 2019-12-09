@@ -75,7 +75,6 @@ jobs:
       
       - name: Setup gems
         run: bundle install --without development --deployment --jobs 4 --retry 3
-        if: steps.bundler-cache.outputs.cache-hit != 'true'
 
       - name: Get yarn cache directory
         id: yarn-cache-dir
