@@ -24,6 +24,8 @@ jobs:
         run: gem install rubocop:0.69.0 rubocop-discourse 
       - name: Rubocop Linter
         run: ruby script/rubocop_github_action.rb
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build:
     name: ${{ matrix.build_types }}
